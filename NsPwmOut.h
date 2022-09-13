@@ -5,6 +5,8 @@
 
 #define NSPWM_NSEC_PER_SEC (1000UL * 1000UL * 1000UL)
 
+namespace mext {
+
 class NsPwmOut {
 public:
     NsPwmOut(PinName p) {
@@ -111,5 +113,7 @@ private:
     mhal::nspwmout_t pwm;
     uint32_t cycles_per_sec_;
 };
+
+}
 
 #endif
