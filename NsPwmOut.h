@@ -100,6 +100,11 @@ public:
         return NSPWM_NSEC_PER_SEC / cycles_per_sec_;
     }
 
+    ~NsPwmOut() {
+        CriticalSectionLock lock; // lock as mbed API can possibly alter global environment
+        mhal::nspwmout_free(&pwm);
+    }
+
 private:
 
     uint32_t ns_to_cycles(uint32_t ns) const {

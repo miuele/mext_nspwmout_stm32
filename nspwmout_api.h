@@ -251,7 +251,7 @@ inline void nspwmout_init(nspwmout_t *obj, PinName pin)
     LL_TIM_EnableCounter(timer);
 }
 
-inline void nwpwmout_free(nspwmout_t *obj)
+inline void nspwmout_free(nspwmout_t *obj)
 {
     pin_function(obj->pin, STM_PIN_DATA(STM_MODE_ANALOG, GPIO_NOPULL, 0));
 }
