@@ -109,6 +109,7 @@ private:
         return (uint32_t)ns;
     }
 
+    DeepSleepLock lock;
 
     mhal::nspwmout_t pwm;
     uint32_t cycles_per_sec_;
