@@ -27,10 +27,11 @@ public:
     }
 
     void period_ns(int ns) {
-        CriticalSectionLock lock;
+        const float duty = read();
+        const uint32_t period_cycles = ns_to_cycles(ns);
 
-        uint32_t period_cycles = ns_to_cycles(ns);
-        mhal::nspwmout_set_period_cycles(&pwm, period_cycles);
+        CriticalSectionLock lock;
+        mhal::nspwmout_set_cycles(&pwm, period_cycles, (uint32_t)(period_cycles * duty));
     }
 
     void pulsewidth(float seconds) {
@@ -46,9 +47,18 @@ public:
     }
 
     void pulsewidth_ns(int ns) {
-        CriticalSectionLock lock;
+        if (ns < 0) {
+            ns = 0;
+        }
 
         uint32_t pulse_cycles = ns_to_cycles(ns);
+
+        const uint32_t period_cycles = mhal::nspwmout_period_cycles(&pwm);
+        if (pulse_cycles > period_cycles) {
+            pulse_cycles = period_cycles;
+        }
+
+        CriticalSectionLock lock;
         mhal::nspwmout_set_pulse_cycles(&pwm, pulse_cycles);
     }
 
@@ -71,6 +81,13 @@ public:
     }
 
     void write(float duty) {
+
+        if (duty < 0.f) {
+            duty = 0.f;
+        } else if (duty > 1.f) {
+            duty = 1.f;
+        }
+
         CriticalSectionLock lock;
 
         uint32_t pulse_cycles = (uint32_t)(mhal::nspwmout_period_cycles(&pwm) * duty);
