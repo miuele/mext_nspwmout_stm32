@@ -27,10 +27,14 @@ public:
     }
 
     void period_ns(int ns) {
-        const uint32_t period_cycles = ns_to_cycles(ns);
+        if (ns < 0) {
+            ns = 0;
+        }
+
+        uint32_t period_cycles = ns_to_cycles(ns);
 
         CriticalSectionLock lock;
-        const float duty = read();
+        float duty = read();
         mhal::nspwmout_set_cycles(&pwm, period_cycles, (uint32_t)(period_cycles * duty));
     }
 
@@ -91,7 +95,7 @@ public:
 
         CriticalSectionLock lock;
 
-        uint32_t pulse_cycles = (uint32_t)(mhal::nspwmout_period_cycles(&pwm) * duty);
+        const uint32_t pulse_cycles = (uint32_t)(mhal::nspwmout_period_cycles(&pwm) * duty);
         mhal::nspwmout_set_pulse_cycles(&pwm, pulse_cycles);
     }
 
