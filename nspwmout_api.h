@@ -91,8 +91,8 @@ inline uint32_t nspwmout_get_tim_clk(nspwmout_t *obj) {
 		++map;
 	}
 
-	uint32_t apb_presc;
-	uint32_t pclk;
+	uint32_t apb_presc = 0;
+	uint32_t pclk = 0;
 	if (map->pwmoutApb == PWMOUT_ON_APB1) {
 		apb_presc = (uint32_t)LL_RCC_GetAPB1Prescaler();
 		pclk = HAL_RCC_GetPCLK1Freq();
