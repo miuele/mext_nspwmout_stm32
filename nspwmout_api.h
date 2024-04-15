@@ -273,6 +273,7 @@ inline void set_cycles(TIM_TypeDef *timer, uint32_t channel, bool cmpl, uint32_t
 
 	if (period_cycles == 0u) {
 		LL_TIM_CC_DisableChannel(timer, current_ll_channel);
+		return;
 	}
 
 	period_cycles -= 1u;
